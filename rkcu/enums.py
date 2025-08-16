@@ -24,29 +24,27 @@ class Speed(Enum):
 
 class Brightness(Enum):
     LEVEL_0 = 0
-    LEVEL_1 = 51
-    LEVEL_2 = 102
-    LEVEL_3 = 153
-    LEVEL_4 = 204
-    LEVEL_5 = 255
+    LEVEL_1 = 1
+    LEVEL_2 = 2
+    LEVEL_3 = 3
+    LEVEL_4 = 4
+    LEVEL_5 = 5
 
     @staticmethod
     def from_value(value: int):
-        # Allow any value from 0 to 255
-        if 0 <= value <= 255:
-            # We don't need to return an enum member, just the value.
-            # The calling code will use this value directly.
-            # However, to maintain consistency, we can just return the value
-            # and the caller will handle it.
-            # For the purpose of this class, we can just return the validated value.
-            # Let's find the closest level for compatibility, but the real fix is in config.py
-            levels = [
-                Brightness.LEVEL_0, Brightness.LEVEL_1, Brightness.LEVEL_2,
-                Brightness.LEVEL_3, Brightness.LEVEL_4, Brightness.LEVEL_5
-            ]
-            return min(levels, key=lambda x: abs(x.value - value))
+        # Brightness should be 0-5 (discrete levels)
+        if 0 <= value <= 5:
+            levels = {
+                0: Brightness.LEVEL_0,
+                1: Brightness.LEVEL_1,
+                2: Brightness.LEVEL_2,
+                3: Brightness.LEVEL_3,
+                4: Brightness.LEVEL_4,
+                5: Brightness.LEVEL_5,
+            }
+            return levels[value]
         else:
-            print("warning: brightness value out of range (0-255), using 255")
+            print(f"warning: brightness must be between 0 and 5. Using 5. (Got: {value})")
             return Brightness.LEVEL_5
 
 class RainbowMode(Enum):

@@ -11,11 +11,6 @@ class RKCU:
         if not rk_devices:
             raise IOError("RK keyboard not found. Please check VID and PID.")
 
-        # From the comprehensive test, we know interface 2 works for RK100
-        # It has: Interface number: 1, Usage: 1, Usage page: 65280
-        # Path contains: Col05 (Collection 5)
-        
-        # First, try to find the exact working interface (Col05)
         target_interface = None
         for device_info in rk_devices:
             path = device_info['path']
@@ -24,12 +19,10 @@ class RKCU:
             else:
                 path_str = str(path)
             
-            # Look for Col05 in the path (this was the working interface)
             if 'Col05' in path_str and device_info.get('usage_page', 0) == 65280:
                 target_interface = device_info
                 break
         
-        # If Col05 not found, try any interface with usage_page 65280
         if not target_interface:
             for device_info in rk_devices:
                 if device_info.get('usage_page', 0) == 65280:
@@ -48,7 +41,7 @@ class RKCU:
             raise IOError(f"Could not open the keyboard configuration interface: {e}")
     
     def apply_config(self, config: Config):
-        # We know that send_feature_report works for the RK100
+        # Send the standard lighting configuration
         data_to_send = config.report()
         try:
             result = self.device.send_feature_report(bytes(data_to_send))
@@ -56,6 +49,16 @@ class RKCU:
                 raise IOError(f"Failed to send complete config. Expected {len(data_to_send)} bytes, sent {result}")
         except Exception as e:
             raise IOError(f"Failed to send config to keyboard: {e}")
+        
+        # Send per-key RGB buffers if they exist
+        custom_buffers = config.get_custom_light_buffers()
+        for buffer in custom_buffers:
+            try:
+                result = self.device.send_feature_report(bytes(buffer))
+                if result != len(buffer):
+                    raise IOError(f"Failed to send complete custom RGB buffer. Expected {len(buffer)} bytes, sent {result}")
+            except Exception as e:
+                raise IOError(f"Failed to send custom RGB buffer to keyboard: {e}")
     
     def close_kb(self):
         self.device.close()
