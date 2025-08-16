@@ -24,14 +24,19 @@ class Config:
         self.ANIMATION_SLEEP_DURATION = sleep
     
     def update(self, var: dict):
-        self.ANIMATION_TYPE = Animation.from_value("neon_stream" if var['animation'] == None else var['animation'])
-        self.ANIMATION_SPEED = Speed.from_value(5 if var['speed'] == None else int(var['speed']))
-        self.ANIMATION_BRIGHTNESS = Brightness.from_value(5 if var['brightness'] == None else int(var['brightness']))
-        self.ANIMATION_RED = int(255 if var['red'] == None else var['red'])
-        self.ANIMATION_GREEN = int(255 if var['green'] == None else var['green'])
-        self.ANIMATION_BLUE = int(255 if var['blue'] == None else var['blue'])
+        self.ANIMATION_TYPE = Animation.from_value("neon_stream" if var['animation'] is None else var['animation'])
+        self.ANIMATION_SPEED = Speed.from_value(5 if var['speed'] is None else int(var['speed']))
+        # The brightness value is now passed directly, not as an enum.
+        raw_brightness = 255 if var['brightness'] is None else int(var['brightness'])
+        if not (0 <= raw_brightness <= 255):
+            print("warning: brightness must be between 0 and 255. Using 255.")
+            raw_brightness = 255
+        self.ANIMATION_BRIGHTNESS = raw_brightness
+        self.ANIMATION_RED = int(255 if var['red'] is None else var['red'])
+        self.ANIMATION_GREEN = int(255 if var['green'] is None else var['green'])
+        self.ANIMATION_BLUE = int(255 if var['blue'] is None else var['blue'])
         self.ANIMATION_RAINBOW = RainbowMode.from_value(var['rainbow'])
-        self.ANIMATION_SLEEP_DURATION = Sleep.from_value(5 if var['sleep'] == None else int(var['sleep']))
+        self.ANIMATION_SLEEP_DURATION = Sleep.from_value(5 if var['sleep'] is None else int(var['sleep']))
 
     def report(self) -> bytearray:
         report = bytearray(65)
@@ -41,12 +46,11 @@ class Config:
         report[3] = 0x02
         report[4] = 0x29
         report[5] = self.ANIMATION_TYPE.value
-        report[6] = 0x00
+        # report[6] is unused (0x00)
         report[7] = self.ANIMATION_SPEED.value
-
-        report[8] = self.ANIMATION_BRIGHTNESS.value
-        report[9] = self.ANIMATION_GREEN
-        report[10] = self.ANIMATION_RED
+        report[8] = self.ANIMATION_BRIGHTNESS
+        report[9] = self.ANIMATION_RED
+        report[10] = self.ANIMATION_GREEN
         report[11] = self.ANIMATION_BLUE
         report[12] = self.ANIMATION_RAINBOW.value
         report[13] = self.ANIMATION_SLEEP_DURATION.value
@@ -57,7 +61,7 @@ def get_base_config() -> Config:
     config = Config(
         Animation.NEON_STREAM,
         Speed.SPEED_5,
-        Brightness.BRIGHTNESS_5,
+        255,  # Brightness is now a direct value
         255,
         255,
         255,

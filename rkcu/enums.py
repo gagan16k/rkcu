@@ -23,28 +23,31 @@ class Speed(Enum):
             return Speed.SPEED_5 # default value
 
 class Brightness(Enum):
-    BRIGHTNESS_0 = 0x00
-    BRIGHTNESS_1 = 0X01
-    BRIGHTNESS_2 = 0X02
-    BRIGHTNESS_3 = 0X03
-    BRIGHTNESS_4 = 0X04
-    BRIGHTNESS_5 = 0X05
+    LEVEL_0 = 0
+    LEVEL_1 = 51
+    LEVEL_2 = 102
+    LEVEL_3 = 153
+    LEVEL_4 = 204
+    LEVEL_5 = 255
 
     @staticmethod
     def from_value(value: int):
-        values = {
-            0: Brightness.BRIGHTNESS_0,
-            1: Brightness.BRIGHTNESS_1,
-            2: Brightness.BRIGHTNESS_2,
-            3: Brightness.BRIGHTNESS_3,
-            4: Brightness.BRIGHTNESS_4,
-            5: Brightness.BRIGHTNESS_5,
-        }
-        if value in list(values.keys()):
-            return values[value]
-        else :
-            print("warning: unable to find specified brightness, using Brightness 5")
-            return Brightness.BRIGHTNESS_5 # default value
+        # Allow any value from 0 to 255
+        if 0 <= value <= 255:
+            # We don't need to return an enum member, just the value.
+            # The calling code will use this value directly.
+            # However, to maintain consistency, we can just return the value
+            # and the caller will handle it.
+            # For the purpose of this class, we can just return the validated value.
+            # Let's find the closest level for compatibility, but the real fix is in config.py
+            levels = [
+                Brightness.LEVEL_0, Brightness.LEVEL_1, Brightness.LEVEL_2,
+                Brightness.LEVEL_3, Brightness.LEVEL_4, Brightness.LEVEL_5
+            ]
+            return min(levels, key=lambda x: abs(x.value - value))
+        else:
+            print("warning: brightness value out of range (0-255), using 255")
+            return Brightness.LEVEL_5
 
 class RainbowMode(Enum):
     OFF = 0x00
@@ -80,28 +83,28 @@ class Sleep(Enum):
             return Sleep.SLEEP_NEVER # default value
 
 class Animation(Enum):
-    NEON_STREAM = 0x01
-    RIPPLES_SHINING = 0x02
-    ROTATING_WINDMILL = 0x03
-    SINE_WAVE = 0x04 
-    RAINBOW_ROULETTE = 0x05
-    STARS_TWINKLE = 0x06
-    LAYER_UPON_LAYER = 0x07
-    RICH_AND_HONORED = 0x08
-    MARQUEE_EFFECT = 0x09
-    ROTATING_STORM = 0x0a
-    SERPENTINE_HORSE = 0x0b
-    RETRO_SNAKE = 0x0c
-    DIAGONAL_TRANSFORMER = 0x0d
-    # CUSTOMIZE = 0x0e
-    AMBILIGHT = 0x0f
-    STREAMER = 0x10
-    STEADY = 0x11
-    BREATHING = 0x12
-    NEON = 0x13
-    SHADOW_DISAPPEAR = 0x14
-    FLASH_AWAY = 0x15
-    # MUSIC = 0x16
+    # Using the same mode bit values as rangoli project
+    NEON_STREAM = 1       # RGBModes::NeonStream = 1
+    RIPPLES_SHINING = 2   # RGBModes::RipplesShining = 2
+    ROTATING_WINDMILL = 3 # RGBModes::RotatingWindmill = 3
+    SINE_WAVE = 4         # RGBModes::SineWave = 4
+    RAINBOW_ROULETTE = 5  # RGBModes::RainbowRoulette = 5
+    STARS_TWINKLE = 6     # RGBModes::StarsTwinkle = 6
+    LAYER_UPON_LAYER = 7  # RGBModes::LayerUponLayer = 7
+    RICH_AND_HONORED = 8  # RGBModes::RichAndHonored = 8
+    MARQUEE_EFFECT = 9    # RGBModes::MarqueeEffect = 9
+    ROTATING_STORM = 10   # RGBModes::RotatingStorm = 10
+    SERPENTINE_HORSE = 11 # RGBModes::SerpentineHorseRace = 11
+    RETRO_SNAKE = 12      # RGBModes::RetroSnake = 12
+    DIAGONAL_TRANSFORMER = 13  # RGBModes::DiagonalTransformation = 13
+    CUSTOM = 14           # RGBModes::Custom = 14
+    AMBILIGHT = 15        # RGBModes::Ambilight = 15
+    STREAMER = 16         # RGBModes::Streamer = 16
+    STEADY = 17           # RGBModes::Steady = 17
+    BREATHING = 18        # RGBModes::Breathing = 18
+    NEON = 19             # RGBModes::Neon = 19
+    SHADOW_DISAPPEAR = 20 # RGBModes::ShadowDisappear = 20
+    FLASH_AWAY = 21       # RGBModes::FlashAway = 21
 
     @staticmethod
     def from_value(value: str):

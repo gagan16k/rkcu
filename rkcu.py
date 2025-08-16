@@ -7,8 +7,8 @@ from rkcu.utils import RKCU
 # author: Hardik Srivastava [oddlyspaced]
 
 parser = argparse.ArgumentParser(
-    prog = 'RK61 Config Utility - Linux',
-    description = 'Linux Utility to manage profiles on the Royal Kludge RK61 Keyboard.'
+    prog = 'RK61 Config Utility',
+    description = 'Utility to manage profiles on the Royal Kludge RK61 Keyboard.'
 )
 
 color_config = get_base_config()
@@ -37,5 +37,5 @@ def update_config(var: dict):
 setup_arg_parser()
 read_args()
 
-rk = RKCU(0x258a, 0x004a)
+rk = RKCU(0x258a, 0x00e0)
 rk.apply_config(color_config)
