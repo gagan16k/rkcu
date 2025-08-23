@@ -69,7 +69,7 @@ def get_base_config() -> Config:
     config = Config(
         Animation.NEON_STREAM,
         Speed.SPEED_5,
-        Brightness.LEVEL_5,  # Use brightness level 5 (max)
+        Brightness.LEVEL_0,  # Use brightness level 0
         255,
         255,
         255,
