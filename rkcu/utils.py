@@ -41,7 +41,6 @@ class RKCU:
             raise IOError(f"Could not open the keyboard configuration interface: {e}")
     
     def apply_config(self, config: Config):
-        # Send the standard lighting configuration
         data_to_send = config.report()
         try:
             result = self.device.send_feature_report(bytes(data_to_send))

@@ -32,7 +32,6 @@ class Brightness(Enum):
 
     @staticmethod
     def from_value(value: int):
-        # Brightness should be 0-5 (discrete levels)
         if 0 <= value <= 5:
             levels = {
                 0: Brightness.LEVEL_0,
@@ -44,8 +43,8 @@ class Brightness(Enum):
             }
             return levels[value]
         else:
-            print(f"warning: brightness must be between 0 and 5. Using 5. (Got: {value})")
-            return Brightness.LEVEL_5
+            print(f"warning: unable to find specified brightness, using Brightness 5")
+            return Brightness.LEVEL_5 # default value
 
 class RainbowMode(Enum):
     OFF = 0x00

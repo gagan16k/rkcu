@@ -1,11 +1,13 @@
 import argparse
 import json
+import sys
 
-from rkcu.config import get_base_config
-from rkcu.utils import RKCU
+from .config import get_base_config
+from .utils import RKCU
 
 # Python based Command Line wrapper for managing profiles on Royal Kludge keyboards
 # author: Hardik Srivastava [oddlyspaced]
+# changes: Gagan K [gagan16k]
 
 parser = argparse.ArgumentParser(
     prog = 'RKCU - Royal Kludge Config Utility',
@@ -65,13 +67,11 @@ def read_args():
                 keys_data = json.load(f)
             
             for key_index, hex_color in keys_data.items():
-                # Skip non-integer keys (like comments)
                 try:
                     key_idx = int(key_index)
                     color_config.PER_KEY_RGB.set_key_color_hex(key_idx, hex_color)
                     print(f"Set key {key_idx} to color #{hex_color}")
                 except ValueError:
-                    # Skip non-integer keys (like "comment", "description", etc.)
                     continue
         except Exception as e:
             print(f"Error loading JSON file: {e}")
@@ -82,15 +82,17 @@ def read_args():
 def update_config(var: dict):
     color_config.update(var)
 
-setup_arg_parser()
-read_args()
+def main():
+    setup_arg_parser()
+    read_args()
 
-# Only apply config if we're not just listing keys
-import sys
-if not any(arg in sys.argv for arg in ['--list-keys', '-h', '--help']):
-    rk = RKCU(0x258a, 0x00e0)
-    rk.apply_config(color_config)
-    print("Configuration applied successfully!")
-    
-    if color_config.PER_KEY_RGB.has_custom_colors():
-        print(f"Applied custom colors to {len(color_config.PER_KEY_RGB.custom_colors)} keys")
+    if not any(arg in sys.argv for arg in ['--list-keys', '-h', '--help']):
+        rk = RKCU(0x258a, 0x00e0)
+        rk.apply_config(color_config)
+        print("Configuration applied successfully!")
+        
+        if color_config.PER_KEY_RGB.has_custom_colors():
+            print(f"Applied custom colors to {len(color_config.PER_KEY_RGB.custom_colors)} keys")
+
+if __name__ == "__main__":
+    main()
