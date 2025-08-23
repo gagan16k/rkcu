@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rkcu"
-version = "1.0.0"
+version = "1.0.1"
 description = "Royal Kludge Config Utility - Manage profiles and per-key RGB lighting"
 readme = "readme.md"
 requires-python = ">=3.7"
