@@ -1,13 +1,13 @@
 
 # RKCU - Royal Kludge Config Utility
-Python3 based command line utility to manage and modify profiles on Royal Kludge keyboards with **per-key RGB support**.
+Python3 based command line utility/API to manage and modify profiles on Royal Kludge keyboards with **per-key RGB support**.
 
 ## Features
 - **Per-Key RGB Lighting**: Set individual colors for each key
 - **JSON Configuration**: Load complex lighting setups from files
 - **Windows Compatible**: Updated for Windows HID interface detection
 - **RK100 Support**: Enhanced for newer Royal Kludge models
-- **Rangoli**: Based on reverse engineering from the rangoli project
+- **Rangoli**: Based on the [rangoli project](https://github.com/rnayabed/rangoli)
 
 ## Supported Keyboards
 - Royal Kludge RK100 (VID: 0x258a, PID: 0x00e0)
@@ -17,25 +17,6 @@ Python3 based command line utility to manage and modify profiles on Royal Kludge
 ## Dependencies
 
     hidapi
-
-
-## Quick Start - Per-Key RGB
-
-**List available keys:**
-```bash
-python rkcu.py --list-keys
-```
-
-**Set individual key colors:**
-```bash
-# Set Q key to red, A key to green, Space to blue
-python rkcu.py --set-key 15:ff0000 --set-key 29:00ff00 --set-key 56:0000ff
-```
-
-**Load colors from JSON file:**
-```bash
-python rkcu.py --set-keys-json sample_per_key_config.json
-```
 
 ## Standard Usage
 
@@ -95,13 +76,10 @@ Arguments :
 
 	--set-key KEY_INDEX:RRGGBB
 	# Set color for a specific key (can be used multiple times)
-	# Example: --set-key 15:ff0000 (sets Q key to red)
+	# Example: --set-key 15:ff0000 (sets key 15 to red)
 	
 	--set-keys-json FILE_PATH
 	# Load multiple key colors from JSON file
-	
-	--list-keys
-	# List all available key indices and names
 	
 	--clear-custom
 	# Clear all custom per-key colors
@@ -113,9 +91,13 @@ Example :
     python rkcu.py -sp 5 -an "rotating_storm" -rb
     
     # Per-key RGB examples
-    python rkcu.py --set-key 15:ff0000 --set-key 29:00ff00  # Red Q, Green A
+    python rkcu.py --set-key 15:ff0000 --set-key 29:00ff00 
     python rkcu.py --set-keys-json rainbow_config.json      # Load from file
-    python rkcu.py --set-key 15:ff0000 --brightness 200     # Custom key with brightness
+    python rkcu.py --set-key 15:ff0000 --brightness 2     # Custom key with brightness
+
+## Custom Testing
+
+Readme with some standard tests for keyboard (mainly per-key) RGB functionality can be found in [`custom_testing/README.md`](custom_testing/README.md).
 
 ## Notes
 
@@ -147,3 +129,5 @@ Currently the script allows setting and configuring of inbuilt color profiles on
 
 ## Credits
 Big credits to [this](https://gitlab.com/CalcProgrammer1/OpenRGB/-/issues/2308) issue thread on the OpenRGB Gitlab Repo that served great reference.
+
+Special thanks to the [Rangoli project](https://github.com/rnayabed/rangoli) for the foundational work that made the per-key RGB functionality possible.

@@ -80,7 +80,6 @@ class Sleep(Enum):
             return Sleep.SLEEP_NEVER # default value
 
 class Animation(Enum):
-    # Using the same mode bit values as rangoli project
     NEON_STREAM = 1       # RGBModes::NeonStream = 1
     RIPPLES_SHINING = 2   # RGBModes::RipplesShining = 2
     ROTATING_WINDMILL = 3 # RGBModes::RotatingWindmill = 3
