@@ -18,9 +18,6 @@ Python3 based command line utility to manage and modify profiles on Royal Kludge
 
     hidapi
 
-Installable using `pip` by running:
-
-    pip install hidapi
 
 ## Quick Start - Per-Key RGB
 
@@ -39,8 +36,6 @@ python rkcu.py --set-key 15:ff0000 --set-key 29:00ff00 --set-key 56:0000ff
 ```bash
 python rkcu.py --set-keys-json sample_per_key_config.json
 ```
-
-**See [PER_KEY_RGB_GUIDE.md](PER_KEY_RGB_GUIDE.md) for detailed documentation.**
 
 ## Standard Usage
 
