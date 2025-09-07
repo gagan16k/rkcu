@@ -28,6 +28,7 @@ def setup_arg_parser():
     parser.add_argument('--red', '-r', help='Red color value (0-255)')
     parser.add_argument('--green', '-g', help='Green color value (0-255)')
     parser.add_argument('--blue', '-b', help='Blue color value (0-255)')
+    parser.add_argument('--color', '-c', help='RGB color value in hex format (e.g., ff0000 for red)')
     
     # Per-key RGB options
     parser.add_argument('--set-key', action='append', help='Set color for a specific key: KEY_INDEX:RRGGBB (can be used multiple times)')
@@ -37,6 +38,26 @@ def setup_arg_parser():
 def read_args():
     args = parser.parse_args()
     var = vars(args)
+
+    # Handle hex color conversion
+    if args.color:
+        try:
+            hex_color = args.color.lstrip('#')
+            if len(hex_color) != 6:
+                raise ValueError("Hex color must be 6 characters (e.g., 'ff0000' for red)")
+            
+            red = int(hex_color[0:2], 16)
+            green = int(hex_color[2:4], 16)
+            blue = int(hex_color[4:6], 16)
+            
+            var['red'] = red
+            var['green'] = green
+            var['blue'] = blue
+            
+            print(f"Set RGB color from hex #{hex_color}: R={red}, G={green}, B={blue}")
+        except ValueError as e:
+            print(f"Error parsing hex color '{args.hex}': {e}")
+            return
 
     # Handle clear custom colors
     if args.clear_custom:

@@ -49,6 +49,10 @@ Arguments :
 	
 	--blue, -b 0-255
 	# Blue value of Color
+
+	--color, -c "#RRGGBB"
+	# Set color using hex format (e.g., "#ff0000" for red)
+	# Note: This will override individual --red, --green, --blue values if provided.
 	
 	--animation, -an "animation_name"
 	# List of availaible animations:
