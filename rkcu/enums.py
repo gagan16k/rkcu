@@ -130,3 +130,8 @@ class Animation(Enum):
         else :
             print("warning: unable to find specified animation, using Neon Stream")
             return Animation.NEON_STREAM # default value
+    
+    @staticmethod
+    def list_animations():
+        animations = [anim.name.lower() for anim in Animation]
+        return animations

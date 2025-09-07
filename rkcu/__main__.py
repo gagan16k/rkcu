@@ -4,6 +4,7 @@ import sys
 
 from .config import get_base_config
 from .utils import RKCU
+from .enums import Animation
 
 # Python based Command Line wrapper for managing profiles on Royal Kludge keyboards
 # author: Hardik Srivastava [oddlyspaced]
@@ -21,7 +22,9 @@ def setup_arg_parser():
     parser.add_argument('--speed', '-sp', help='Animation speed (1-5)')
     parser.add_argument('--brightness', '-br', help='Brightness level (0-255)')
     parser.add_argument('--sleep', '-sl', help='Sleep timeout (1-5: 5min/10min/20min/30min/never)')
+
     parser.add_argument('--animation', '-an', help='Animation type')
+    parser.add_argument('--list-animations', '-la', action='store_true', help='List available animations and exit')
 
     parser.add_argument('--rainbow', '-rb', action='store_true', help='Enable rainbow mode')
 
@@ -38,6 +41,13 @@ def setup_arg_parser():
 def read_args():
     args = parser.parse_args()
     var = vars(args)
+
+    # Handle list animations
+    if args.list_animations:
+        anims=Animation.list_animations()
+        for anim in anims:
+            print(anim)
+        sys.exit(0)
 
     # Handle hex color conversion
     if args.color:
@@ -56,7 +66,7 @@ def read_args():
             
             print(f"Set RGB color from hex #{hex_color}: R={red}, G={green}, B={blue}")
         except ValueError as e:
-            print(f"Error parsing hex color '{args.hex}': {e}")
+            print(f"Error parsing hex color '{args.color}': {e}")
             return
 
     # Handle clear custom colors
@@ -107,7 +117,7 @@ def main():
     setup_arg_parser()
     read_args()
 
-    if not any(arg in sys.argv for arg in ['--list-keys', '-h', '--help']):
+    if not any(arg in sys.argv for arg in ['--list-keys', '--list-animations', '-la', '-h', '--help']):
         rk = RKCU(0x258a, 0x00e0)
         rk.apply_config(color_config)
         print("Configuration applied successfully!")
