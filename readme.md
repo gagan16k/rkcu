@@ -76,6 +76,9 @@ Arguments :
 	 - shadow_disappear
 	 - flash_away
 
+	--list-animations, -la
+	# List all supported animation names and exit
+
 ## Per-Key RGB Arguments
 
 	--set-key KEY_INDEX:RRGGBB
